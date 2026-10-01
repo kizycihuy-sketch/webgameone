@@ -1,0 +1,2140 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Game Center</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #111827, #1e3a8a);
+    color: white;
+    min-height: 100vh;
+}
+
+header {
+    text-align: center;
+    padding: 30px 20px;
+}
+
+header h1 {
+    font-size: 40px;
+    margin-bottom: 10px;
+}
+
+header p {
+    max-width: 800px;
+    margin: auto;
+    line-height: 1.6;
+    color: #dbeafe;
+}
+
+#menu {
+    width: 90%;
+    max-width: 1100px;
+    margin: auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: 18px;
+    padding-bottom: 40px;
+}
+
+.game-card {
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 18px;
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.game-card:hover {
+    transform: translateY(-5px);
+    background: rgba(255,255,255,0.2);
+}
+
+.game-icon {
+    font-size: 45px;
+}
+
+.game-card h3 {
+    margin: 10px 0;
+}
+
+.game-card p {
+    color: #cbd5e1;
+    font-size: 14px;
+}
+
+/* GAME AREA */
+
+#gamePage {
+    display: none;
+    width: 90%;
+    max-width: 800px;
+    margin: 20px auto 50px;
+}
+
+.game-box {
+    background: rgba(255,255,255,0.12);
+    border-radius: 20px;
+    padding: 30px;
+    text-align: center;
+    min-height: 400px;
+}
+
+button {
+    border: none;
+    border-radius: 10px;
+    padding: 12px 20px;
+    margin: 7px;
+    background: white;
+    color: #111827;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+button:hover {
+    transform: scale(1.04);
+}
+
+button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+input {
+    padding: 12px;
+    border-radius: 10px;
+    border: none;
+    width: 200px;
+    text-align: center;
+    font-size: 16px;
+}
+
+.back-button {
+    background: #fbbf24;
+}
+
+.big {
+    font-size: 55px;
+    margin: 20px;
+}
+
+.result {
+    min-height: 35px;
+    margin: 15px;
+    font-weight: bold;
+}
+
+.color-box {
+    width: 180px;
+    height: 110px;
+    border-radius: 15px;
+    margin: 20px auto;
+}
+
+.arena {
+    height: 260px;
+    border: 2px dashed rgba(255,255,255,0.4);
+    border-radius: 15px;
+    position: relative;
+    overflow: hidden;
+    margin: 20px 0;
+}
+
+.target {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: red;
+    position: absolute;
+    padding: 0;
+}
+
+.memory {
+    display: grid;
+    grid-template-columns: repeat(4, 70px);
+    justify-content: center;
+    gap: 8px;
+    margin-top: 20px;
+}
+
+.memory button {
+    width: 70px;
+    height: 70px;
+    font-size: 28px;
+    background: #475569;
+    color: transparent;
+}
+
+.memory button.open {
+    background: white;
+    color: black;
+}
+
+.rocket {
+    font-size: 70px;
+    transition: 0.3s;
+}
+
+.card-choice {
+    font-size: 40px;
+    min-width: 80px;
+}
+
+footer {
+    text-align: center;
+    padding: 20px;
+    color: #94a3b8;
+}
+
+@media(max-width:500px) {
+    header h1 {
+        font-size: 30px;
+    }
+
+    .game-box {
+        padding: 20px 10px;
+    }
+
+    .memory {
+        grid-template-columns: repeat(4, 58px);
+    }
+
+    .memory button {
+        width: 58px;
+        height: 58px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>🎮 GAME CENTER</h1>
+
+    <p>
+        Selamat datang di Game Center! Website ini berisi 20 game mini
+        yang dapat dimainkan langsung melalui browser. Pilih game yang
+        kamu inginkan, mainkan tantangannya, dan kumpulkan skor terbaikmu.
+        Rekor permainan akan disimpan di browser.
+    </p>
+</header>
+
+
+<!-- MENU 20 GAME -->
+
+<div id="menu">
+
+    <div class="game-card" onclick="openGame(1)">
+        <div class="game-icon">🔢</div>
+        <h3>1. Tebak Angka</h3>
+        <p>Tebak angka rahasia</p>
+    </div>
+
+    <div class="game-card" onclick="openGame(2)">
+        <div class="game-icon">✊</div>
+        <h3>2. Batu Gunting Kertas</h3>
+        <p>Lawan komputer</p>
+    </div>
+
+    <div class="game-card" onclick="openGame(3)">
+        <div class="game-icon">⚡</div>
+        <h3>3. Klik Cepat</h3>
+        <p>Klik sebanyak mungkin</p>
+    </div>
+
+    <div class="game-card" onclick="openGame(4)">
+        <div class="game-icon">🎨</div>
+        <h3>4. Tebak Warna</h3>
+        <p>Tebak warna yang benar</p>
+    </div>
+
+    <div class="game-card" onclick="openGame(5)">
+        <div class="game-icon">⏱️</div>
+        <h3>5. Uji Reaksi</h3>
+        <p>Tes kecepatan reaksimu</p>
+    </div>
+
+    <div class="game-card" onclick="openGame(6)">
+        <div class="game-icon">🧠</div>
+        <h3>6. Memory Card</h3>
+        <p>Cari pasangan kartu</p>
+    </div>
+
+    <div class="game-card" onclick="openGame(7)">
+        <div class="game-icon">🎯</div>
+        <h3>7. Hit Target</h3>
+        <p>Klik target sebanyak mungkin</p>
+    </div>
+
+    <div class="game-card" onclick="openGame(8)">
+        <div class="game-icon">➕</div>
+        <h3>8. Hitung Cepat</h3>
+        <p>Jawab soal matematika</p>
+    </div>
+
+    <div class="game-card" onclick="openGame(9)">
+        <div class="game-icon">🟢</div>
+        <h3>9. Refleks Warna</h3>
+        <p>Pilih warna sesuai perintah</p>
+    </div>
+
+    <div class="game-card" onclick="openGame(10)">
+        <div class="game-icon">🔐</div>
+        <h3>10. Tebak Password</h3>
+        <p>Cari password rahasia</p>
+    </div>
+
+    <div class="game-card" onclick="openGame(11)">
+        <div class="game-icon">🎲</div>
+        <h3>11. Dadu Battle</h3>
+        <p>Lawan komputer</p>
+    </div>
+
+    <div class="game-card" onclick="openGame(12)">
+        <div class="game-icon">🪙</div>
+        <h3>12. Tebak Koin</h3>
+        <p>Tebak sisi koin</p>
+    </div>
+
+    <div class="game-card" onclick="openGame(13)">
+        <div class="game-icon">🚀</div>
+        <h3>13. Roket</h3>
+        <p>Naikkan roket</p>
+    </div>
+
+    <div class="game-card" onclick="openGame(14)">
+        <div class="game-icon">🍀</div>
+        <h3>14. Keberuntungan</h3>
+        <p>Pilih kartu keberuntungan</p>
+    </div>
+
+    <div class="game-card" onclick="openGame(15)">
+        <div class="game-icon">👆</div>
+        <h3>15. Speed Tap</h3>
+        <p>Tap secepat mungkin</p>
+    </div>
+
+    <div class="game-card" onclick="openGame(16)">
+        <div class="game-icon">2️⃣</div>
+        <h3>16. Genap / Ganjil</h3>
+        <p>Tentukan jenis angka</p>
+    </div>
+
+    <div class="game-card" onclick="openGame(17)">
+        <div class="game-icon">🧩</div>
+        <h3>17. Puzzle Angka</h3>
+        <p>Urutkan angka</p>
+    </div>
+
+    <div class="game-card" onclick="openGame(18)">
+        <div class="game-icon">🎰</div>
+        <h3>18. Lucky Number</h3>
+        <p>Cari angka keberuntungan</p>
+    </div>
+
+    <div class="game-card" onclick="openGame(19)">
+        <div class="game-icon">✅</div>
+        <h3>19. Benar / Salah</h3>
+        <p>Jawab pertanyaan</p>
+    </div>
+
+    <div class="game-card" onclick="openGame(20)">
+        <div class="game-icon">🏆</div>
+        <h3>20. Ultimate Challenge</h3>
+        <p>Tantangan terakhir</p>
+    </div>
+
+</div>
+
+
+<!-- HALAMAN GAME -->
+
+<div id="gamePage">
+
+    <div class="game-box">
+
+        <button class="back-button" onclick="backToMenu()">
+            ⬅ Kembali ke Menu
+        </button>
+
+        <div id="gameContent"></div>
+
+    </div>
+
+</div>
+
+
+<footer>
+    🎮 Game Center — Mainkan dan pecahkan rekor!
+</footer>
+
+
+<script>
+
+/* =========================
+   SISTEM DASAR
+========================= */
+
+function openGame(number) {
+
+    document.getElementById("menu").style.display = "none";
+
+    document.getElementById("gamePage").style.display = "block";
+
+    document.getElementById("gameContent").innerHTML = "";
+
+    window.scrollTo(0,0);
+
+    if(number === 1) game1();
+    if(number === 2) game2();
+    if(number === 3) game3();
+    if(number === 4) game4();
+    if(number === 5) game5();
+    if(number === 6) game6();
+    if(number === 7) game7();
+    if(number === 8) game8();
+    if(number === 9) game9();
+    if(number === 10) game10();
+    if(number === 11) game11();
+    if(number === 12) game12();
+    if(number === 13) game13();
+    if(number === 14) game14();
+    if(number === 15) game15();
+    if(number === 16) game16();
+    if(number === 17) game17();
+    if(number === 18) game18();
+    if(number === 19) game19();
+    if(number === 20) game20();
+}
+
+
+function backToMenu() {
+
+    document.getElementById("gamePage").style.display = "none";
+
+    document.getElementById("menu").style.display = "grid";
+
+    window.scrollTo(0,0);
+}
+
+
+function getRecord(game) {
+
+    return Number(localStorage.getItem("record" + game) || 0);
+
+}
+
+
+function saveRecord(game,score) {
+
+    let old = getRecord(game);
+
+    if(score > old) {
+
+        localStorage.setItem("record" + game,score);
+
+    }
+
+}
+
+
+/* =========================
+   GAME 1
+========================= */
+
+function game1() {
+
+    let target = Math.floor(Math.random() * 100) + 1;
+
+    let tries = 0;
+
+    document.getElementById("gameContent").innerHTML = `
+
+        <h2>🔢 Tebak Angka</h2>
+
+        <p>Aku sudah memilih angka 1 sampai 100.</p>
+
+        <input id="guess" type="number" placeholder="Masukkan angka">
+
+        <br>
+
+        <button id="guessButton">Tebak</button>
+
+        <div class="result" id="guessResult"></div>
+
+        <p>Rekor: <b id="guessRecord">-</b></p>
+
+    `;
+
+    document.getElementById("guessRecord").textContent =
+        getRecord(1) || "-";
+
+    document.getElementById("guessButton").onclick = function() {
+
+        let guess =
+            Number(document.getElementById("guess").value);
+
+        if(guess < 1 || guess > 100) {
+
+            document.getElementById("guessResult").textContent =
+                "Masukkan angka 1 sampai 100.";
+
+            return;
+
+        }
+
+        tries++;
+
+        if(guess === target) {
+
+            document.getElementById("guessResult").textContent =
+                "🎉 Benar! Percobaan: " + tries;
+
+        } else if(guess < target) {
+
+            document.getElementById("guessResult").textContent =
+                "⬆️ Terlalu kecil!";
+
+        } else {
+
+            document.getElementById("guessResult").textContent =
+                "⬇️ Terlalu besar!";
+
+        }
+
+    };
+
+}
+
+
+/* =========================
+   GAME 2
+========================= */
+
+function game2() {
+
+    let round = 0;
+
+    let score = 0;
+
+    document.getElementById("gameContent").innerHTML = `
+
+        <h2>✊ Batu Gunting Kertas</h2>
+
+        <p>Main 5 ronde melawan komputer.</p>
+
+        <button class="card-choice" id="rock">✊</button>
+
+        <button class="card-choice" id="paper">🖐️</button>
+
+        <button class="card-choice" id="scissor">✌️</button>
+
+        <div class="result" id="rpsResult"></div>
+
+        <h3>Skor: <span id="rpsScore">0</span>/5</h3>
+
+    `;
+
+    function play(player) {
+
+        if(round >= 5) return;
+
+        round++;
+
+        let choices = ["rock","paper","scissor"];
+
+        let computer =
+            choices[Math.floor(Math.random()*3)];
+
+        let win =
+            (player === "rock" && computer === "scissor") ||
+            (player === "paper" && computer === "rock") ||
+            (player === "scissor" && computer === "paper");
+
+        if(win) score++;
+
+        let text =
+            player === computer
+            ? "Seri!"
+            : win
+            ? "🎉 Kamu menang!"
+            : "😅 Komputer menang!";
+
+        document.getElementById("rpsResult").textContent =
+            text + " Komputer memilih " + computer;
+
+        document.getElementById("rpsScore").textContent = score;
+
+        if(round === 5) {
+
+            saveRecord(2,score);
+
+            document.getElementById("rpsResult").textContent +=
+                " | Selesai!";
+
+        }
+
+    }
+
+    document.getElementById("rock").onclick =
+        function(){ play("rock"); };
+
+    document.getElementById("paper").onclick =
+        function(){ play("paper"); };
+
+    document.getElementById("scissor").onclick =
+        function(){ play("scissor"); };
+
+}
+
+
+/* =========================
+   GAME 3
+========================= */
+
+function game3() {
+
+    let clicks = 0;
+
+    let running = false;
+
+    let time = 10;
+
+    document.getElementById("gameContent").innerHTML = `
+
+        <h2>⚡ Klik Cepat</h2>
+
+        <p>Klik sebanyak mungkin dalam 10 detik.</p>
+
+        <button id="startClick">Mulai</button>
+
+        <button id="clickButton" disabled>
+            KLIK!
+        </button>
+
+        <h1 id="clickScore">0</h1>
+
+        <p id="clickTime">Waktu: 10</p>
+
+        <p>Rekor: <b id="clickRecord">0</b></p>
+
+    `;
+
+    document.getElementById("clickRecord").textContent =
+        getRecord(3);
+
+    document.getElementById("clickButton").onclick =
+        function() {
+
+            if(running) {
+
+                clicks++;
+
+                document.getElementById("clickScore")
+                    .textContent = clicks;
+
+            }
+
+        };
+
+
+    document.getElementById("startClick").onclick =
+        function() {
+
+            if(running) return;
+
+            clicks = 0;
+
+            time = 10;
+
+            running = true;
+
+            document.getElementById("clickButton")
+                .disabled = false;
+
+            document.getElementById("startClick")
+                .disabled = true;
+
+            let timer = setInterval(function() {
+
+                time--;
+
+                document.getElementById("clickTime")
+                    .textContent = "Waktu: " + time;
+
+                if(time <= 0) {
+
+                    clearInterval(timer);
+
+                    running = false;
+
+                    document.getElementById("clickButton")
+                        .disabled = true;
+
+                    document.getElementById("startClick")
+                        .disabled = false;
+
+                    saveRecord(3,clicks);
+
+                    document.getElementById("clickTime")
+                        .textContent =
+                        "Selesai! Rekor: " + getRecord(3);
+
+                }
+
+            },1000);
+
+        };
+
+}
+
+
+/* =========================
+   GAME 4
+========================= */
+
+function game4() {
+
+    let colors = [
+        ["Merah","#ef4444"],
+        ["Biru","#3b82f6"],
+        ["Hijau","#22c55e"],
+        ["Kuning","#eab308"]
+    ];
+
+    let score = 0;
+
+    let round = 0;
+
+    document.getElementById("gameContent").innerHTML = `
+
+        <h2>🎨 Tebak Warna</h2>
+
+        <div class="color-box" id="colorBox"></div>
+
+        <p>Pilih nama warna yang sesuai.</p>
+
+        <div id="colorButtons"></div>
+
+        <h3>Skor: <span id="colorScore">0</span>/10</h3>
+
+    `;
+
+
+    function nextRound() {
+
+        if(round >= 10) {
+
+            saveRecord(4,score);
+
+            document.getElementById("colorButtons")
+                .innerHTML = "";
+
+            document.getElementById("colorBox")
+                .style.background = "transparent";
+
+            document.getElementById("colorBox")
+                .textContent =
+                "🎉 SELESAI";
+
+            return;
+
+        }
+
+        round++;
+
+        let answer =
+            Math.floor(Math.random()*colors.length);
+
+        let box =
+            document.getElementById("colorBox");
+
+        box.style.background =
+            colors[answer][1];
+
+        let buttons =
+            document.getElementById("colorButtons");
+
+        buttons.innerHTML = "";
+
+        colors.forEach(function(color,index){
+
+            let button =
+                document.createElement("button");
+
+            button.textContent = color[0];
+
+            button.onclick = function(){
+
+                if(index === answer) {
+
+                    score++;
+
+                }
+
+                document.getElementById("colorScore")
+                    .textContent = score;
+
+                nextRound();
+
+            };
+
+            buttons.appendChild(button);
+
+        });
+
+    }
+
+    nextRound();
+
+}
+
+
+/* =========================
+   GAME 5
+========================= */
+
+function game5() {
+
+    document.getElementById("gameContent").innerHTML = `
+
+        <h2>⏱️ Uji Reaksi</h2>
+
+        <p>
+        Klik tombol, lalu tunggu sampai berubah menjadi hijau.
+        </p>
+
+        <button id="reactionButton">MULAI</button>
+
+        <h2 id="reactionResult"></h2>
+
+    `;
+
+    let waiting = false;
+
+    let ready = false;
+
+    let startTime = 0;
+
+    let timer;
+
+
+    document.getElementById("reactionButton").onclick =
+        function() {
+
+            if(ready) {
+
+                let result =
+                    Math.round(performance.now() - startTime);
+
+                ready = false;
+
+                document.getElementById("reactionButton")
+                    .textContent = "MULAI";
+
+                document.getElementById("reactionButton")
+                    .style.background = "white";
+
+                document.getElementById("reactionResult")
+                    .textContent =
+                    "⚡ Waktu reaksi: " + result + " ms";
+
+                return;
+
+            }
+
+            if(waiting) {
+
+                clearTimeout(timer);
+
+                waiting = false;
+
+                document.getElementById("reactionResult")
+                    .textContent =
+                    "❌ Terlalu cepat!";
+
+                document.getElementById("reactionButton")
+                    .textContent = "Coba Lagi";
+
+                return;
+
+            }
+
+            waiting = true;
+
+            document.getElementById("reactionButton")
+                .textContent = "Tunggu...";
+
+            timer = setTimeout(function(){
+
+                waiting = false;
+
+                ready = true;
+
+                startTime = performance.now();
+
+                document.getElementById("reactionButton")
+                    .textContent = "KLIK SEKARANG!";
+
+                document.getElementById("reactionButton")
+                    .style.background = "#22c55e";
+
+            },1500 + Math.random()*2500);
+
+        };
+
+}
+
+
+/* =========================
+   GAME 6
+========================= */
+
+function game6() {
+
+    let values = [
+        "🍎","🍎",
+        "🚀","🚀",
+        "🐱","🐱",
+        "⭐","⭐",
+        "🎮","🎮",
+        "⚽","⚽",
+        "🍕","🍕",
+        "💎","💎"
+    ];
+
+    values.sort(function(){
+        return Math.random() - 0.5;
+    });
+
+    document.getElementById("gameContent").innerHTML = `
+
+        <h2>🧠 Memory Card</h2>
+
+        <p>Cari semua pasangan kartu.</p>
+
+        <div class="memory" id="memoryBoard"></div>
+
+        <p id="memoryResult">
+            Pasangan: 0/8
+        </p>
+
+    `;
+
+    let first = null;
+
+    let lock = false;
+
+    let pairs = 0;
+
+    values.forEach(function(value){
+
+        let button =
+            document.createElement("button");
+
+        button.textContent = value;
+
+        button.onclick = function(){
+
+            if(lock) return;
+
+            if(button.classList.contains("open"))
+                return;
+
+            button.classList.add("open");
+
+            if(first === null) {
+
+                first = button;
+
+                return;
+
+            }
+
+            if(first.textContent === button.textContent) {
+
+                pairs++;
+
+                first = null;
+
+                document.getElementById("memoryResult")
+                    .textContent =
+                    "Pasangan: " + pairs + "/8";
+
+                if(pairs === 8) {
+
+                    document.getElementById("memoryResult")
+                        .textContent =
+                        "🎉 Semua pasangan ditemukan!";
+
+                }
+
+            } else {
+
+                lock = true;
+
+                let old = first;
+
+                setTimeout(function(){
+
+                    old.classList.remove("open");
+
+                    button.classList.remove("open");
+
+                    first = null;
+
+                    lock = false;
+
+                },700);
+
+            }
+
+        };
+
+        document.getElementById("memoryBoard")
+            .appendChild(button);
+
+    });
+
+}
+
+
+/* =========================
+   GAME 7
+========================= */
+
+function game7() {
+
+    let hits = 0;
+
+    document.getElementById("gameContent").innerHTML = `
+
+        <h2>🎯 Hit Target</h2>
+
+        <p>Klik target merah 10 kali.</p>
+
+        <div class="arena" id="targetArena"></div>
+
+        <h3>Hit: <span id="targetScore">0</span>/10</h3>
+
+    `;
+
+    let target =
+        document.createElement("button");
+
+    target.className = "target";
+
+    document.getElementById("targetArena")
+        .appendChild(target);
+
+
+    function moveTarget() {
+
+        let arena =
+            document.getElementById("targetArena");
+
+        target.style.left =
+            Math.random() *
+            (arena.clientWidth - 60) + "px";
+
+        target.style.top =
+            Math.random() *
+            (arena.clientHeight - 60) + "px";
+
+    }
+
+
+    target.onclick = function(){
+
+        hits++;
+
+        document.getElementById("targetScore")
+            .textContent = hits;
+
+        if(hits >= 10) {
+
+            target.remove();
+
+            document.getElementById("targetScore")
+                .textContent = "🎉 Selesai!";
+
+        } else {
+
+            moveTarget();
+
+        }
+
+    };
+
+    moveTarget();
+
+}
+
+
+/* =========================
+   GAME 8
+========================= */
+
+function game8() {
+
+    let score = 0;
+
+    let round = 0;
+
+    let answer = 0;
+
+    document.getElementById("gameContent").innerHTML = `
+
+        <h2>➕ Hitung Cepat</h2>
+
+        <h2 id="mathQuestion"></h2>
+
+        <input id="mathAnswer"
+               type="number"
+               placeholder="Jawaban">
+
+        <br>
+
+        <button id="mathButton">
+            Jawab
+        </button>
+
+        <h3>Skor:
+            <span id="mathScore">0</span>/10
+        </h3>
+
+        <p id="mathResult"></p>
+
+    `;
+
+
+    function nextQuestion() {
+
+        if(round >= 10) {
+
+            document.getElementById("mathResult")
+                .textContent =
+                "🎉 Selesai! Skor: " + score + "/10";
+
+            return;
+
+        }
+
+        round++;
+
+        let a =
+            Math.floor(Math.random()*20)+1;
+
+        let b =
+            Math.floor(Math.random()*20)+1;
+
+        answer = a + b;
+
+        document.getElementById("mathQuestion")
+            .textContent =
+            a + " + " + b + " = ?";
+
+        document.getElementById("mathAnswer")
+            .value = "";
+
+    }
+
+
+    document.getElementById("mathButton").onclick =
+        function(){
+
+            let userAnswer =
+                Number(
+                    document.getElementById("mathAnswer")
+                    .value
+                );
+
+            if(userAnswer === answer) {
+
+                score++;
+
+            }
+
+            document.getElementById("mathScore")
+                .textContent = score;
+
+            nextQuestion();
+
+        };
+
+    nextQuestion();
+
+}
+
+
+/* =========================
+   GAME 9
+========================= */
+
+function game9() {
+
+    let score = 0;
+
+    let round = 0;
+
+    document.getElementById("gameContent").innerHTML = `
+
+        <h2>🟢 Refleks Warna</h2>
+
+        <h3 id="colorCommand"></h3>
+
+        <button id="redButton">MERAH</button>
+
+        <button id="blueButton">BIRU</button>
+
+        <h3>Skor:
+            <span id="reflexScore">0</span>/10
+        </h3>
+
+    `;
+
+    let answer = "";
+
+    function next() {
+
+        if(round >= 10) {
+
+            document.getElementById("colorCommand")
+                .textContent =
+                "🎉 Selesai!";
+
+            return;
+
+        }
+
+        round++;
+
+        answer =
+            Math.random() < 0.5
+            ? "MERAH"
+            : "BIRU";
+
+        document.getElementById("colorCommand")
+            .textContent =
+            "Klik: " + answer;
+
+    }
+
+    function choose(color) {
+
+        if(color === answer) {
+
+            score++;
+
+        }
+
+        document.getElementById("reflexScore")
+            .textContent = score;
+
+        next();
+
+    }
+
+    document.getElementById("redButton").onclick =
+        function(){choose("MERAH")};
+
+    document.getElementById("blueButton").onclick =
+        function(){choose("BIRU")};
+
+    next();
+
+}
+
+
+/* =========================
+   GAME 10
+========================= */
+
+function game10() {
+
+    let passwords = [
+        "apel",
+        "komputer",
+        "sekolah",
+        "internet",
+        "game"
+    ];
+
+    let password =
+        passwords[Math.floor(Math.random()*passwords.length)];
+
+    document.getElementById("gameContent").innerHTML = `
+
+        <h2>🔐 Tebak Password</h2>
+
+        <p>
+        Pilih salah satu dari:
+        apel, komputer, sekolah, internet, game
+        </p>
+
+        <input id="passwordInput"
+               placeholder="Password">
+
+        <br>
+
+        <button id="passwordButton">
+            Coba
+        </button>
+
+        <div class="result" id="passwordResult"></div>
+
+    `;
+
+    document.getElementById("passwordButton")
+        .onclick = function(){
+
+            let answer =
+                document.getElementById("passwordInput")
+                .value.toLowerCase();
+
+            if(answer === password) {
+
+                document.getElementById("passwordResult")
+                    .textContent =
+                    "🎉 Password benar!";
+
+            } else {
+
+                document.getElementById("passwordResult")
+                    .textContent =
+                    "❌ Password salah.";
+
+            }
+
+        };
+
+}
+
+
+/* =========================
+   GAME 11
+========================= */
+
+function game11() {
+
+    let round = 0;
+
+    let score = 0;
+
+    document.getElementById("gameContent").innerHTML = `
+
+        <h2>🎲 Dadu Battle</h2>
+
+        <button id="diceButton">
+            Lempar Dadu
+        </button>
+
+        <div class="big" id="diceResult">
+            🎲
+        </div>
+
+        <p>Menang:
+            <b id="diceScore">0</b>
+        </p>
+
+    `;
+
+    document.getElementById("diceButton")
+        .onclick = function(){
+
+            if(round >= 5) return;
+
+            round++;
+
+            let player =
+                Math.floor(Math.random()*6)+1;
+
+            let computer =
+                Math.floor(Math.random()*6)+1;
+
+            if(player > computer) {
+
+                score++;
+
+            }
+
+            document.getElementById("diceResult")
+                .textContent =
+                "Kamu: " + player +
+                " | Komputer: " + computer;
+
+            document.getElementById("diceScore")
+                .textContent = score;
+
+            if(round === 5) {
+
+                document.getElementById("diceResult")
+                    .textContent +=
+                    " | Selesai!";
+
+            }
+
+        };
+
+}
+
+
+/* =========================
+   GAME 12
+========================= */
+
+function game12() {
+
+    let score = 0;
+
+    let round = 0;
+
+    document.getElementById("gameContent").innerHTML = `
+
+        <h2>🪙 Tebak Koin</h2>
+
+        <p>Pilih sisi koin.</p>
+
+        <button id="heads">🖼️ GAMBAR</button>
+
+        <button id="tails">🔢 ANGKA</button>
+
+        <h2 id="coinResult">🪙</h2>
+
+        <h3>Skor:
+            <span id="coinScore">0</span>/10
+        </h3>
+
+    `;
+
+    function play(choice) {
+
+        if(round >= 10) return;
+
+        round++;
+
+        let coin =
+            Math.random() < 0.5
+            ? "GAMBAR"
+            : "ANGKA";
+
+        if(choice === coin) {
+
+            score++;
+
+        }
+
+        document.getElementById("coinResult")
+            .textContent =
+            "Hasil: " + coin;
+
+        document.getElementById("coinScore")
+            .textContent = score;
+
+        if(round === 10) {
+
+            document.getElementById("coinResult")
+                .textContent += " | 🎉 Selesai!";
+
+        }
+
+    }
+
+    document.getElementById("heads").onclick =
+        function(){play("GAMBAR")};
+
+    document.getElementById("tails").onclick =
+        function(){play("ANGKA")};
+
+}
+
+
+/* =========================
+   GAME 13
+========================= */
+
+function game13() {
+
+    let fuel = 10;
+
+    let height = 0;
+
+    document.getElementById("gameContent").innerHTML = `
+
+        <h2>🚀 Roket</h2>
+
+        <div class="rocket" id="rocket">
+            🚀
+        </div>
+
+        <p>Bahan bakar:
+            <b id="fuel">10</b>
+        </p>
+
+        <button id="launch">
+            NYALAKAN MESIN
+        </button>
+
+        <p id="rocketResult"></p>
+
+    `;
+
+    document.getElementById("launch")
+        .onclick = function(){
+
+            if(fuel <= 0) return;
+
+            fuel--;
+
+            height++;
+
+            document.getElementById("fuel")
+                .textContent = fuel;
+
+            document.getElementById("rocket")
+                .style.transform =
+                "translateY(-" + height*20 + "px)";
+
+            if(fuel === 0) {
+
+                document.getElementById("rocketResult")
+                    .textContent =
+                    "🚀 Roket mencapai ketinggian " +
+                    height + "!";
+
+            }
+
+        };
+
+}
+
+
+/* =========================
+   GAME 14
+========================= */
+
+function game14() {
+
+    let score = 0;
+
+    let round = 0;
+
+    document.getElementById("gameContent").innerHTML = `
+
+        <h2>🍀 Keberuntungan</h2>
+
+        <p>Pilih satu kartu.</p>
+
+        <div id="luckCards"></div>
+
+        <h3>Skor:
+            <span id="luckScore">0</span>
+        </h3>
+
+    `;
+
+    function newRound() {
+
+        if(round >= 8) {
+
+            document.getElementById("luckCards")
+                .innerHTML = "";
+
+            document.getElementById("luckScore")
+                .textContent =
+                "🎉 Selesai! " + score + " poin";
+
+            return;
+
+        }
+
+        round++;
+
+        let container =
+            document.getElementById("luckCards");
+
+        container.innerHTML = "";
+
+        for(let i=0;i<3;i++) {
+
+            let button =
+                document.createElement("button");
+
+            button.className = "card-choice";
+
+            button.textContent = "🃏";
+
+            button.onclick = function(){
+
+                let points =
+                    Math.floor(Math.random()*10)+1;
+
+                score += points;
+
+                document.getElementById("luckScore")
+                    .textContent = score;
+
+                newRound();
+
+            };
+
+            container.appendChild(button);
+
+        }
+
+    }
+
+    newRound();
+
+}
+
+
+/* =========================
+   GAME 15
+========================= */
+
+function game15() {
+
+    let taps = 0;
+
+    let running = false;
+
+    document.getElementById("gameContent").innerHTML = `
+
+        <h2>👆 Speed Tap</h2>
+
+        <p>Tap sebanyak mungkin dalam 5 detik.</p>
+
+        <button id="speedStart">
+            MULAI
+        </button>
+
+        <button id="speedTap" disabled>
+            TAP!
+        </button>
+
+        <h1 id="speedScore">0</h1>
+
+        <p id="speedTime">5 detik</p>
+
+    `;
+
+    document.getElementById("speedTap")
+        .onclick = function(){
+
+            if(running) {
+
+                taps++;
+
+                document.getElementById("speedScore")
+                    .textContent = taps;
+
+            }
+
+        };
+
+
+    document.getElementById("speedStart")
+        .onclick = function(){
+
+            if(running) return;
+
+            taps = 0;
+
+            running = true;
+
+            let time = 5;
+
+            document.getElementById("speedTap")
+                .disabled = false;
+
+            document.getElementById("speedStart")
+                .disabled = true;
+
+            let timer =
+                setInterval(function(){
+
+                    time--;
+
+                    document.getElementById("speedTime")
+                        .textContent =
+                        time + " detik";
+
+                    if(time <= 0) {
+
+                        clearInterval(timer);
+
+                        running = false;
+
+                        document.getElementById("speedTap")
+                            .disabled = true;
+
+                        document.getElementById("speedStart")
+                            .disabled = false;
+
+                        document.getElementById("speedTime")
+                            .textContent =
+                            "🎉 Selesai!";
+
+                    }
+
+                },1000);
+
+        };
+
+}
+
+
+/* =========================
+   GAME 16
+========================= */
+
+function game16() {
+
+    let score = 0;
+
+    let round = 0;
+
+    let number = 0;
+
+    document.getElementById("gameContent").innerHTML = `
+
+        <h2>2️⃣ Genap / Ganjil</h2>
+
+        <h1 id="evenNumber"></h1>
+
+        <button id="evenButton">
+            GENAP
+        </button>
+
+        <button id="oddButton">
+            GANJIL
+        </button>
+
+        <h3>Skor:
+            <span id="evenScore">0</span>/10
+        </h3>
+
+    `;
+
+
+    function next() {
+
+        if(round >= 10) {
+
+            document.getElementById("evenNumber")
+                .textContent =
+                "🎉 Selesai!";
+
+            return;
+
+        }
+
+        round++;
+
+        number =
+            Math.floor(Math.random()*100)+1;
+
+        document.getElementById("evenNumber")
+            .textContent = number;
+
+    }
+
+
+    function answer(type) {
+
+        if(
+            (number % 2 === 0 && type === "even") ||
+            (number % 2 !== 0 && type === "odd")
+        ) {
+
+            score++;
+
+        }
+
+        document.getElementById("evenScore")
+            .textContent = score;
+
+        next();
+
+    }
+
+
+    document.getElementById("evenButton")
+        .onclick =
+        function(){answer("even")};
+
+    document.getElementById("oddButton")
+        .onclick =
+        function(){answer("odd")};
+
+    next();
+
+}
+
+
+/* =========================
+   GAME 17
+========================= */
+
+function game17() {
+
+    let numbers =
+        [1,2,3,4,5,6,7,8,9];
+
+    numbers.sort(function(){
+        return Math.random()-0.5;
+    });
+
+    let nextNumber = 1;
+
+    document.getElementById("gameContent").innerHTML = `
+
+        <h2>🧩 Puzzle Angka</h2>
+
+        <p>Klik angka dari 1 sampai 9.</p>
+
+        <div id="puzzle"></div>
+
+        <h3 id="puzzleResult">
+            Cari angka 1
+        </h3>
+
+    `;
+
+    numbers.forEach(function(number){
+
+        let button =
+            document.createElement("button");
+
+        button.className = "card-choice";
+
+        button.textContent = number;
+
+        button.onclick = function(){
+
+            if(number === nextNumber) {
+
+                button.disabled = true;
+
+                nextNumber++;
+
+                if(nextNumber > 9) {
+
+                    document.getElementById("puzzleResult")
+                        .textContent =
+                        "🎉 Puzzle selesai!";
+
+                } else {
+
+                    document.getElementById("puzzleResult")
+                        .textContent =
+                        "Cari angka " + nextNumber;
+
+                }
+
+            }
+
+        };
+
+        document.getElementById("puzzle")
+            .appendChild(button);
+
+    });
+
+}
+
+
+/* =========================
+   GAME 18
+========================= */
+
+function game18() {
+
+    let target =
+        Math.floor(Math.random()*20)+1;
+
+    document.getElementById("gameContent").innerHTML = `
+
+        <h2>🎰 Lucky Number</h2>
+
+        <p>Tebak angka 1 sampai 20.</p>
+
+        <input id="luckyInput"
+               type="number">
+
+        <br>
+
+        <button id="luckyButton">
+            Tebak
+        </button>
+
+        <div class="result" id="luckyResult"></div>
+
+    `;
+
+
+    document.getElementById("luckyButton")
+        .onclick = function(){
+
+            let guess =
+                Number(
+                    document.getElementById("luckyInput")
+                    .value
+                );
+
+            if(guess === target) {
+
+                document.getElementById("luckyResult")
+                    .textContent =
+                    "🎉 Kamu menemukan Lucky Number!";
+
+            } else if(guess < target) {
+
+                document.getElementById("luckyResult")
+                    .textContent =
+                    "⬆️ Angkanya lebih besar.";
+
+            } else {
+
+                document.getElementById("luckyResult")
+                    .textContent =
+                    "⬇️ Angkanya lebih kecil.";
+
+            }
+
+        };
+
+}
+
+
+/* =========================
+   GAME 19
+========================= */
+
+function game19() {
+
+    let questions = [
+
+        ["Bumi mengelilingi Matahari.",true],
+
+        ["Air mendidih pada 50°C.",false],
+
+        ["Indonesia berada di Asia.",true],
+
+        ["2 + 2 = 5.",false],
+
+        ["HTML digunakan untuk membuat struktur website.",true],
+
+        ["Ikan hidup tanpa air.",false],
+
+        ["JavaScript dapat membuat website interaktif.",true],
+
+        ["Matahari adalah planet.",false],
+
+        ["7 adalah bilangan ganjil.",true],
+
+        ["CSS digunakan untuk mengatur tampilan website.",true]
+
+    ];
+
+    let index = 0;
+
+    let score = 0;
+
+    document.getElementById("gameContent").innerHTML = `
+
+        <h2>✅ Benar / Salah</h2>
+
+        <h3 id="statement"></h3>
+
+        <button id="trueButton">
+            BENAR
+        </button>
+
+        <button id="falseButton">
+            SALAH
+        </button>
+
+        <h3>Skor:
+            <span id="trueScore">0</span>/10
+        </h3>
+
+    `;
+
+
+    function next() {
+
+        if(index >= questions.length) {
+
+            document.getElementById("statement")
+                .textContent =
+                "🎉 Selesai!";
+
+            return;
+
+        }
+
+        document.getElementById("statement")
+            .textContent =
+            questions[index][0];
+
+    }
+
+
+    function answer(value) {
+
+        if(value === questions[index][1]) {
+
+            score++;
+
+        }
+
+        index++;
+
+        document.getElementById("trueScore")
+            .textContent = score;
+
+        next();
+
+    }
+
+
+    document.getElementById("trueButton")
+        .onclick =
+        function(){answer(true)};
+
+    document.getElementById("falseButton")
+        .onclick =
+        function(){answer(false)};
+
+    next();
+
+}
+
+
+/* =========================
+   GAME 20
+========================= */
+
+function game20() {
+
+    let score = 0;
+
+    let round = 0;
+
+    let answer = 0;
+
+    document.getElementById("gameContent").innerHTML = `
+
+        <h2>🏆 Ultimate Challenge</h2>
+
+        <p>Jawab 10 soal matematika dengan cepat!</p>
+
+        <h2 id="ultimateQuestion"></h2>
+
+        <input id="ultimateAnswer"
+               type="number">
+
+        <br>
+
+        <button id="ultimateButton">
+            JAWAB
+        </button>
+
+        <h3>Skor:
+            <span id="ultimateScore">0</span>/10
+        </h3>
+
+        <p id="ultimateResult"></p>
+
+    `;
+
+
+    function next() {
+
+        if(round >= 10) {
+
+            document.getElementById("ultimateQuestion")
+                .textContent =
+                "🏆 SELESAI!";
+
+            document.getElementById("ultimateResult")
+                .textContent =
+                "Skor akhir: " + score + "/10";
+
+            document.getElementById("ultimateButton")
+                .disabled = true;
+
+            return;
+
+        }
+
+        round++;
+
+        let a =
+            Math.floor(Math.random()*20)+1;
+
+        let b =
+            Math.floor(Math.random()*20)+1;
+
+        answer = a+b;
+
+        document.getElementById("ultimateQuestion")
+            .textContent =
+            a + " + " + b + " = ?";
+
+        document.getElementById("ultimateAnswer")
+            .value = "";
+
+    }
+
+
+    document.getElementById("ultimateButton")
+        .onclick = function(){
+
+            let userAnswer =
+                Number(
+                    document.getElementById("ultimateAnswer")
+                    .value
+                );
+
+            if(userAnswer === answer) {
+
+                score++;
+
+            }
+
+            document.getElementById("ultimateScore")
+                .textContent = score;
+
+            next();
+
+        };
+
+    next();
+
+}
+
+</script>
+
+</body>
+</html>
+  
+  
+  
+  
+  
+  
